@@ -15,6 +15,18 @@ double cost(double x){
   return costval;
 }
 
+//[[Rcpp::export]]
+double gcost(vector<double> g){
+  double sum = 0;
+  int gsize = g.size();
+  for(int i = 0; i < gsize; i++){
+    sum += cost(g[i]);
+  }
+  sum = sum / g.size();
+  return sum;
+}
+
+
 //Intercourse
 //[[Rcpp::export]]
 vector<double> seeds(double minx, double maxx, double cutx){
@@ -35,4 +47,40 @@ double randbang(vector<double> parents){
 }
 
 //[[Rcpp::export]]
-vector<double> reprod(vector<double> parents)
+SEXP reprod(vector<double> parents, int nkid){
+  vector<double> kids(nkid);
+  vector<double> kids_cost(nkid);
+  for(int i = 0; i<nkid; i++){
+    kids[i] = randbang(parents);
+    kids_cost[i] = cost(kids[i]);
+  }
+  return List::create(Named("kids")=kids,Named("kidscost")=kids_cost);
+}
+
+//[[Rcpp::export]]
+vector<double> reprod2(vector<double> parents, int nkid){
+  vector<double> kids(nkid);
+  vector<double> kids_cost(nkid);
+  for(int i = 0; i<nkid; i++){
+    kids[i] = randbang(parents);
+    kids_cost[i] = cost(kids[i]);
+  }
+  double kcost = gcost(kids_cost);
+  int countkeep = 0;
+  for(int i = 0; i <nkid; i++){
+    if(kids_cost[i] < kcost){
+      countkeep++;
+    }
+  }
+  vector<double> kids2keep(countkeep);
+  int j = 0;
+  for(int i = 0; i <nkid; i++){
+    if(kids_cost[i] < kcost){
+      kids2keep[j] = kids[i];
+      j++;
+    }
+  }
+  return kids2keep;
+}
+
+
