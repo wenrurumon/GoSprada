@@ -1,17 +1,15 @@
 
+
 library(Rcpp)
 library(inline)
 library(RcppArmadillo)
-rm(list=ls());sourceCpp('test.cpp')
+rm(list=ls());sourceCpp('gosprada.cpp')
 
-#
+#set seeds for the first generation
 
 g1 <- seeds(0,7,14000)
 
-getg <- function(g){
-  g2 <- reprod(g,length(g))
-  g2$kids[g2$kidscost<=quantile(g2$kidscost)[2]]
-}
+#Reproductions
 
 rlt <- list(g1)
 for(i in 2:10){
