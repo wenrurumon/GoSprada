@@ -1,6 +1,4 @@
 
-
-setwd('C:/Users/WenluluSens/Documents/Project/learnr/rcpp')
 library(Rcpp)
 library(inline)
 library(RcppArmadillo)
