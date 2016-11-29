@@ -10,14 +10,14 @@ using namespace arma;
 
 //Cost
 //[[Rcpp::export]]
-double cost(double x){
-  double costval = sin(x)*2 + cos(x*2+10);
+float cost(float x){
+  float costval = sin(x)*2 + cos(x*2+10);
   return costval;
 }
 
 //[[Rcpp::export]]
-double gcost(vector<double> g){
-  double sum = 0;
+float averagecost(vector<float> g){
+  float sum = 0;
   int gsize = g.size();
   for(int i = 0; i < gsize; i++){
     sum += cost(g[i]);
@@ -26,3 +26,7 @@ double gcost(vector<double> g){
   return sum;
 }
 
+//[[Rcpp::export]]
+float gcost(vector<float> g){
+  return averagecost(g);
+}
