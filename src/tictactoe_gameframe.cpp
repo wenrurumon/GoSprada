@@ -40,3 +40,38 @@ mat gamerlt(mat xlog){
   }
   return x;
 }
+
+//macro
+
+vec csum(const mat & X){
+  int nCols = X.n_cols;
+  vec out(nCols);
+  for(int i = 0; i < nCols; i++){
+    out(i) = sum(X.col(i));
+  }
+  return(out);
+}
+vec rsum(const mat & X){
+  int nRows = X.n_rows;
+  vec out(nRows);
+  for(int i = 0; i < nRows; i++){
+    out(i) = sum(X.row(i));
+  }
+  return(out);
+}
+
+//[[Rcpp::export]]
+vector<int> gamescore(mat x){
+  vector<int> score(8);
+  vec cscore = csum(x);
+  vec rscore = rsum(x);
+  int diag1 = x[0] + x[4] + x[8];
+  int diag2 = x[2] + x[4] + x[6];
+  for(int i=0; i < 3; i++){
+    score[i] = cscore[i];
+    score[i+3] = rscore[i];
+  }
+  score[7] = diag1; score[8] = diag2;
+  return score;
+}
+
