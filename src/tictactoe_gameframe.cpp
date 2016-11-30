@@ -126,7 +126,7 @@ SEXP game2(){
   int win = callwin(xlog2);
   
   return List::create(Named("winner")=win,
-                             Named("gamelog")=xlog2,
-                             Named("gamerlt")=gamerlt(xlog2));
+                      Named("gamelog")=xlog2,
+                      Named("gamerlt")=gamerlt(xlog2));
 }
 
