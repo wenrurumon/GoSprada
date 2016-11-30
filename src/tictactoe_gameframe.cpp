@@ -35,6 +35,9 @@ mat gamerlt(mat xlog){
   int xsize = x.size();
   int player = 1;
   for(int i = 0; i<xsize; i++){
+    if(xlog[i]==0){
+      break;
+    }
     x[xlog[i]-1] = player;
     player = player * -1;
   }
@@ -73,5 +76,57 @@ vector<int> gamescore(mat x){
   }
   score[7] = diag1; score[8] = diag2;
   return score;
+}
+
+//[[Rcpp::export]]
+int callwin(mat x){
+  mat rlt = gamerlt(x);
+  vector<int> score = gamescore(rlt);
+  int win = 0;
+  for(int i = 0; i < 8; i++){
+    if(abs(score[i])==3){
+      win = score[i]/3;
+      break;
+    }
+  }
+  return win;
+}
+
+//[[Rcpp::export]]
+mat game(){
+  mat xlog = gamelog();
+  
+  mat xlog2 = zeros(2,5);
+  
+  for(int i = 0; i < 9; i++ ){
+    xlog2[i] = xlog[i];
+    cout << xlog2 << endl;
+    int win = callwin(xlog2);
+    if(win!=0){
+      cout << win << " win" << endl;
+      break;
+    }
+  }
+  return xlog2;
+}
+
+//[[Rcpp::export]]
+SEXP game2(){
+  mat xlog = gamelog();
+  mat xlog2 = zeros(2,5);
+  
+  for(int i = 0; i < 9; i++ ){
+    xlog2[i] = xlog[i];
+    int win = callwin(xlog2);
+    if(win!=0){
+      break;
+    }
+  }
+  
+  int win = callwin(xlog2);
+  
+  return List::create(Named("winner")=win,
+                             Named("gamelog")=xlog2,
+                             Named("gamerlt")=gamerlt(xlog2));
 }
 
