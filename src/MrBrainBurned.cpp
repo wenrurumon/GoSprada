@@ -55,7 +55,7 @@ SEXP test(){
   x.init();
   return List::create(_["P"]=x.outpool(),
                       _["p1"]=x.outp1(),
-                      _["p2"]=x.outp2())
+                      _["p2"]=x.outp2());
 }
 
 //[[Rcpp::export]]
@@ -65,7 +65,7 @@ SEXP test2(){
   x.carding(1);
   return List::create(_["P"]=x.outpool(),
                       _["p1"]=x.outp1(),
-                      _["p2"]=x.outp2())
+                      _["p2"]=x.outp2());
 }
 
 
