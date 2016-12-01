@@ -45,7 +45,7 @@ public:
     } else {
       player2.insert(player2.end(),pick);
     }
-    pool.erase(pool.begin+pick);
+    pool.erase(pool.begin()+pick);
   }
 };
 
