@@ -41,9 +41,9 @@ public:
     int psize = pool.size();
     int pick = rand() % psize;
     if(x == 1){
-      player1.insert(player1.end(),pick);
+      player1.insert(player1.end(),pool[pick]);
     } else {
-      player2.insert(player2.end(),pick);
+      player2.insert(player2.end(),pool[pick]);
     }
     pool.erase(pool.begin()+pick);
   }
