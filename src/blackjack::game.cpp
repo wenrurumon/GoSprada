@@ -14,15 +14,14 @@ int main() {
 	vector<int> i2,i3;
 	game game1;
 	game1.init(i1,i2,i3);
+	vector<int> pushcard = { 1,2,1,2,1,2,1 };
 	game1.display();
-	game1.licence(1);
-	game1.display();
-	game1.licence(2);
-	game1.display();
-	game1.licence(1);
-	game1.display();
-	game1.licence(2);
-	game1.display();
+	for (int i = 0; i < pushcard.size(); i++) {
+		game1.licence(pushcard[i]);
+		game1.display();
+		game1.end();
+	}
+
 
 	return 0;
 }
