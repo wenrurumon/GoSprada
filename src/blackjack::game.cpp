@@ -25,15 +25,18 @@ public:
 	void init(vector<int> x, vector<int> y) {
 		know = x;
 		hold = y;
-		print(x);
-		print(y);
+		know.erase(know.begin()+0);
 	}
-	vector<int> display_know() {
-		return know;
+	void display() {
+		cout << "KNOW" << endl;
+		print(know);
+		cout << "HOLD" << endl;
+		print(hold);
 	}
-	vector<int> display_hold() {
+	vector<int> holdval() {
 		return hold;
 	}
+
 };
 
 //Class Game
@@ -42,26 +45,51 @@ private:
 	vector<int> cards;
 	player p1, p2;
 public:
-	void init() {
-		vector<int> cards(52);
-		for (int i = 0; i < 13; i++) {
-			cards.insert(cards.end(), 4, i + 1);
-		}
-		player p1, p2;
-	}
 	void init(vector<int> xcards, vector<int> x1, vector<int> x2) {
+		cards.clear();
 		cards = xcards;
 		p1.init(x1, x2);
 		p2.init(x2, x1);
+	}
+	void display() {
+		cout << "CARDS" << endl;
+		print(cards);
+		cout << "P1" << endl;
+		p1.display();
+		cout << "P2" << endl;
+		p2.display();
+	}
+	void licence(int p) {
+		int cardsize = cards.size();
+		int pick = rand() % cardsize;
+		int pickval = cards[pick];
+		cards.erase(cards.begin() + pick);
+
+		vector<int> h1 = p1.holdval();
+		vector<int> h2 = p2.holdval();
+
+		if (p == 1) {
+			h1.insert(h1.end(),1,pickval);
+		}
+		else {
+			h2.insert(h2.end(),1,pickval);
+		}
+		
+		p1.init(h2, h1);
+		p2.init(h1, h2);
 	}
 };
 
 
 int main() {
-	vector<int> i1 = { 1,2,3,4,5 };
-	vector<int> i2 = { 3,4,5 };
-	vector<int> i3 = { 1,3,5 };
+	vector<int> i1;
+	for (int i = 0; i < 13; i++) {
+		i1.insert(i1.end(), 4, i + 1);
+	}
+	vector<int> i2, i3;
 	game game1;
-	game1.init(i1, i2, i3);
+	game1.init(i1,i2,i3);
+	game1.display();
+
 	return 0;
 }
