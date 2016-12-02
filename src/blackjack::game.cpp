@@ -25,7 +25,10 @@ public:
 	void init(vector<int> x, vector<int> y) {
 		know = x;
 		hold = y;
-		know.erase(know.begin()+0);
+		if (know.size() > 0 ) {  
+			know.erase(know.begin() + 0);
+		}
+		
 	}
 	void display() {
 		cout << "KNOW" << endl;
@@ -86,9 +89,17 @@ int main() {
 	for (int i = 0; i < 13; i++) {
 		i1.insert(i1.end(), 4, i + 1);
 	}
-	vector<int> i2, i3;
+	vector<int> i2,i3;
 	game game1;
 	game1.init(i1,i2,i3);
+	game1.display();
+	game1.licence(1);
+	game1.display();
+	game1.licence(2);
+	game1.display();
+	game1.licence(1);
+	game1.display();
+	game1.licence(2);
 	game1.display();
 
 	return 0;
