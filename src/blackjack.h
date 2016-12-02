@@ -13,6 +13,13 @@ void print(vector<int> x) {
 	}
 	cout << endl;
 }
+int sum(vector<int> x) {
+	int s = 0, xsize = x.size();
+	for (int i = 0; i < xsize; i++) {
+		s += x[i];
+	}
+	return s;
+}
 
 //Class Player
 class player {
@@ -80,6 +87,35 @@ public:
 
 		p1.init(h2, h1);
 		p2.init(h1, h2);
+	}
+	void end() {
+		vector<int> h1 = p1.holdval();
+		vector<int> h2 = p2.holdval();
+		cout << "P1:" << sum(h1) << " P2:" << sum(h2) << endl;
+		if (sum(h1) > 21 && sum(h2) > 21) {
+			cout << "Draw" << endl;
+		} 
+		else if (sum(h1) > 21) {
+			cout << "P2 Win" << endl;
+		}
+		else if (sum(h2) > 21) {
+			cout << "P1 Win" << endl;
+		}
+		else if (sum(h2) > sum(h1)) {
+			cout << "P2 Win" << endl;
+		}
+		else if (sum(h1) > sum(h2)) {
+			cout << "P1 Win" << endl;
+		}
+		else if (sum(h1) == sum(h2) && sum(h1) > 0) {
+			int h1size = h1.size(), h2size = h2.size();
+			if (h1size > h2size) {
+				cout << "P1 Win" << endl;
+			}
+			else {
+				cout << "P2 Win" << endl;
+			}
+		}
 	}
 };
 
