@@ -80,10 +80,17 @@ track <- function(road,start,end,score=NULL){
     p <- p[!is.na(p)][1]
     steps <- c(steps,p) 
   }
-  for(i in steps){
-    road[i] <- 1
+  moves <- lapply(steps,getposition,mat=road)
+  for (i in 2:length(moves)){
+    moves[[i-1]] <- moves[[i]]-moves[[i-1]]
   }
-  return(list(road=road,steps=steps))
+  coremoves <- list(c(-1,0),c(1,0),c(0,-1),c(0,1))
+  moves <- c("U","D","L","R")[match(moves[-length(moves)],coremoves)]
+  for(i in 1:length(moves)){
+    # road[steps[i]] <- moves[i]
+    road[steps[i]] <- 1
+  }
+  return(list(road=road,steps=steps,moves=moves))
 }
 
  
@@ -102,17 +109,22 @@ run <- function(road,bias=0,itn=NULL){
       rt[statei] <- max(scorei)
     }
     rj <- rt
+    is.null(itn)&sum(rj==0,na.rm=T)==0
     if(is.null(itn)&sum(rj==0,na.rm=T)==0){
       print(i)
       break
     }
   }
-  round(rj,4)
+  rj
 }
 
-set.seed(12345);roadi <- randroad(30,5,-2,T,-NA)
+set.seed(12345);roadi <- randroad(100,3,-1,T,-NA)
 score.null <- run(roadi,bias=0.1,itn=NULL)
-score.100 <- run(roadi,bias=0.1,itn=100)
+# score.100 <- run(roadi,bias=0.1,itn=100)
 
-track.null <- track(roadi,120,91,score=score.null)
-track.100 <- track(roadi,120,91,score=score.100)
+starti <- 300
+track.null <- track(roadi,start=starti,end=which(roadi==1),score=score.null)
+# track.100 <- track(roadi,start=starti,end=which(roadi==1),score=score.100)
+track.null
+
+
