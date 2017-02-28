@@ -58,13 +58,43 @@ public:
   }
 };
 
+class moves{
+private:
+  int xrow, xcol;
+public:
+  void init(){
+    xrow=0;
+    xcol=0;
+  }
+  void init(int x_,int y_){
+    xrow = x_;
+    xcol = y_;
+  }
+  void moveup(){
+    xrow = xrow-1;
+  }
+  void movedown(){
+    xrow = xrow+1;
+  }
+  void moveleft(){
+    xcol = xcol-1;
+  }
+  void moveright(){
+    xcol = xcol+1;
+  }
+  vector<int> display(){
+    vector<int> rlt(2);
+    rlt[0] = xrow; rlt[1] = xcol;
+    return rlt;
+  }
+};
+
 //Main
 int test(mat m){
-  maze m1, m2;
-  m1.init();
+  maze m2;
   m2.init(m);
-  cout << m1.display() << endl;
   cout << m2.display() << endl;
+  
   return 0;
 }
 
