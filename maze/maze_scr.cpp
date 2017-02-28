@@ -17,7 +17,7 @@ vector<int> get_position(int i, mat & x){
   }
   int icol = (i-1)/nrow;
   int irow = i - icol*ncol;
-  rlt[0] = irow+1; rlt[1] = icol;
+  rlt[0] = irow; rlt[1] = icol+1;
   return rlt;
 }
 
