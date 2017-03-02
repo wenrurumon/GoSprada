@@ -52,7 +52,7 @@ move <- function(i,state=c(0,0),bias=0,mat=NULL,returnall=TRUE){
   moves <- lapply(which(probs>0),coremove,state=state)
   moves.sel <- sapply(moves,checkrange,dim=dim)
   if(sum(moves.sel)==0){
-     return(NULL)
+    return(NULL)
   }
   rlt <- list(moves=moves[moves.sel],probs=probs[probs>0.0001][moves.sel])
   if(!is.null(mat)){
@@ -93,12 +93,12 @@ track <- function(road,start,end,score=NULL){
   return(list(road=road,steps=steps,moves=moves))
 }
 
- 
+
 ###############################
 # test
 ###############################
 
-run <- function(road,bias=0,itn=NULL){
+run <- function(road,bias=0,itn=NULL,start=NULL){
   # road <- roadi; bias = .1; disc=0.9; itn <- 100
   states <- which(road==0)
   rj <-  road
@@ -109,22 +109,21 @@ run <- function(road,bias=0,itn=NULL){
       rt[statei] <- max(scorei)
     }
     rj <- rt
-    is.null(itn)&sum(rj==0,na.rm=T)==0
     if(is.null(itn)&sum(rj==0,na.rm=T)==0){
-      print(i)
-      break
+      if(!is.null(start)){
+        if(road[start]>0){
+          break
+        }
+      } else {
+        break
+      }
     }
   }
   rj
 }
 
-set.seed(12345);roadi <- randroad(100,3,-1,T,-NA)
-score.null <- run(roadi,bias=0.1,itn=NULL)
-# score.100 <- run(roadi,bias=0.1,itn=100)
-
-starti <- 300
-track.null <- track(roadi,start=starti,end=which(roadi==1),score=score.null)
-# track.100 <- track(roadi,start=starti,end=which(roadi==1),score=score.100)
-track.null
-
-
+set.seed(12345);roadi <- randroad(20,4,-2,F,NA)
+roadi
+(score.null <- run(roadi,bias=0.1,itn=10))
+starti <- which(roadi==0)[sum(roadi==0,na.rm=T)]
+(track.null <- track(roadi,start=starti,end=which(roadi==1),score=score.null))
