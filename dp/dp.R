@@ -3,7 +3,7 @@ rm(list=ls())
 library(Rcpp)
 library(RcppArmadillo)
 setwd('/home/huzixin/Documents/maze')
-rs <- function(){eval(parse(text="sourceCpp('mazeR.cpp')"))}
+rs <- function(){eval(parse(text="sourceCpp('dpR.cpp')"))}
 rs()
 
 ##########################
