@@ -3,7 +3,7 @@ rm(list=ls())
 library(Rcpp)
 library(RcppArmadillo)
 setwd('/home/huzixin/Documents/maze')
-rs <- function(){eval(parse(text="sourceCpp('dp.cpp')"))}
+rs <- function(){eval(parse(text="sourceCpp('mazeR.cpp')"))}
 rs()
 
 ##########################
@@ -11,10 +11,12 @@ rs()
 ##########################
 
 #Setup a traffic condition with 3 lanes and several blocks
-matfull <- matrix(0,8,3)
-for(i in c(2,4,6)){
-	set.seed(1);matfull[i,sample(3,2)] <- -1
+matfull <- matrix(0,20,5)
+set.seed(1)
+for(i in seq(1,nrow(matfull),2)){
+	matfull[i,sample(ncol(matfull),3)] <- -1
 }
+matfull[1] <- 10
 matx <- matfull[1:5,]; matx[1] <- 10
 
 #given the road status within sight, export the optimal roate
@@ -39,40 +41,35 @@ dp_insight <- function(mat,startp){
 }
 
 #Assume we can only see the road status 3 rows in front of us.
-see <- function(pxy,traffic=matfull){
+learn <- function(pxy,traffic=matfull){
+	#get current environment
 	rowi <- pxy[1]
 	if(rowi>4){
 		traffic[1:(rowi-4),] <- NA
+		target_row <- which(rowSums(is.na(traffic))==0)[1]
+		target_col <- which(traffic[target_row,]==max(traffic[target_row,],na.rm=T))
+		traffic[target_row,target_col] <- 10
 	}
-	target_row <- which(rowSums(is.na(traffic))==0)[1]
-	target_col <- which(traffic[target_row,]==max(traffic[target_row,],na.rm=T))
-	traffic[target_row,target_col] <- 10
 	pi <- pos2poi(pxy,traffic)
-	list(pi=pi,traffic=traffic)		
+	#get the score matrix with dp
+	mati <- dp_insight(traffic,pi)
+	#decision
+	scorei <- act_score_all(pi,mati)
+	acti <- which(scorei==max(scorei,na.rm=T))[1]
+	#output
+	list(position=pi,score=mati,action=acti)
 }
-move <- function(seei){
-	mati <- dp_insight(seei$traffic,seei$pi)
-	scorei <- act_score_all(seei$pi,mati)
-	#sapply(1:4,function(x){act_score(x,seei$pi,mati)})
-	which(scorei==max(scorei,na.rm=T))
-}
-think <- function(pxy,traffic){
-	seei <- see(pxy,traffic)
-	seei$movei <- move(seei)
-	seei
-}
-
 
 ######################################
 # Go
 ######################################
 
-pi <- c(8,2)
-steps <- list(think(pi,matfull))
+pi <- c(nrow(matfull),2)
+steps <- list(learn(pi,matfull))
 i <- 1
 while(i<100){
 	i <- i+1
-	pi <- act(steps[[i-1]]$movei,pi)
+	pi <- act(steps[[i-1]]$action,pi)
 	if(pi[1]==1){break}
-	steps[[i]] <- think(pi,matfull)
+	steps[[i]] <- learn(pi,matfull)
 }
