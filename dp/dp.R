@@ -3,7 +3,7 @@ rm(list=ls())
 library(Rcpp)
 library(RcppArmadillo)
 setwd('/home/huzixin/Documents/maze')
-rs <- function(){eval(parse(text="sourceCpp('mazeR.cpp')"))}
+rs <- function(){eval(parse(text="sourceCpp('dp.cpp')"))}
 rs()
 
 ##########################
@@ -13,7 +13,7 @@ rs()
 #Setup a traffic condition with 3 lanes and several blocks
 matfull <- matrix(0,8,3)
 for(i in c(2,4,6)){
-	set.seed(12345);matfull[i,sample(3,2)] <- -1
+	set.seed(1);matfull[i,sample(3,2)] <- -1
 }
 matx <- matfull[1:5,]; matx[1] <- 10
 
@@ -30,7 +30,7 @@ dp_insight <- function(mat,startp){
 		candidates2 <- which(sapply(candidates_score,function(x){any(ifelse(is.na(x),0,x)>0)}))
 		candidates2_score <- sapply(candidates_score[candidates2],function(x){
 			x <- ifelse(is.na(x),0,x)
-			max(x)*0.8 + sum(x)/3*0.2
+			max(x)*0.8 + (sum(x)-max(x))/4*0.2
 			})
 		#update the score matrix
 		mat[candidates[candidates2]] <- candidates2_score
